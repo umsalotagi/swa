@@ -1,22 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
-  <groupId>swa</groupId>
-  <artifactId>swa</artifactId>
+  <groupId>com.swapasya</groupId>
+  <artifactId>swa2</artifactId>
+  <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-
-  <name>swa</name>
+  <name>swa2 Maven Webapp</name>
   <url>http://maven.apache.org</url>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
   <dependencies>
   
-  		<!-- Spring framework -->
+    		<!-- Spring framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -56,9 +49,9 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
   <build>
-		<plugins>
+    <finalName>swa2</finalName>
+    <plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
@@ -77,6 +70,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
-	
+  </build>
 </project>
