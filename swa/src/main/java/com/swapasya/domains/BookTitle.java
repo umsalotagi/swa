@@ -37,6 +37,8 @@ public class BookTitle {
 	private String imgPath;
 	
 	List<Book> books;
+	List<WaitList> waitList;
+	List<AssignList> assignList;
 	
 	/**
 	 * @param bookTitleID
@@ -73,6 +75,44 @@ public class BookTitle {
 	
 	public void addBook (Book book) {
 		this.books.add(book);
+	}
+	
+	
+
+	public String getAuthour() {
+		return authour;
+	}
+
+	public void setAuthour(String authour) {
+		this.authour = authour;
+	}
+
+	public List<WaitList> getWaitList() {
+		return waitList;
+	}
+
+	public void setWaitList(List<WaitList> waitList) {
+		this.waitList = waitList;
+	}
+	
+	public void addToWaitList(WaitList waitList) {
+		this.waitList.add(waitList);
+	}
+	
+	public void removeFromWaitList (WaitList waitList) {
+		this.waitList.remove(waitList);
+	}
+
+	public List<AssignList> getAssignList() {
+		return assignList;
+	}
+
+	public void setAssignList(List<AssignList> assignList) {
+		this.assignList = assignList;
+	}
+	
+	public void addToAssignList(AssignList assignList) {
+		this.assignList.add(assignList);
 	}
 
 	public String getBookTitleID() {
