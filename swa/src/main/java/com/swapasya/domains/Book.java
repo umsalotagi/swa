@@ -33,5 +33,101 @@ public class Book {
 		private Date issueDate ;
 		@DateTimeFormat(iso = ISO.DATE_TIME)
 		private Date expectedReturnDate ;
+		
+		
+		/**
+		 * @param bookID
+		 * @param purchaseDate
+		 * @param price
+		 * @param categoryType
+		 */
+		public Book(String bookID, Date purchaseDate, double price, String categoryType) {
+			this.bookID = bookID;
+			this.purchaseDate = purchaseDate;
+			this.price = price;
+			this.categoryType = categoryType;
+		}
+
+
+		public String getBookID() {
+			return bookID;
+		}
+
+
+		public void setBookID(String bookID) {
+			this.bookID = bookID;
+		}
+
+
+		public Date getPurchaseDate() {
+			return purchaseDate;
+		}
+
+
+		public void setPurchaseDate(Date purchaseDate) {
+			this.purchaseDate = purchaseDate;
+		}
+
+
+		public double getPrice() {
+			return price;
+		}
+
+
+		public void setPrice(double price) {
+			this.price = price;
+		}
+
+
+		public String getBorrowedBy() {
+			return borrowedBy;
+		}
+
+
+		public void setBorrowedBy(String borrowedBy) {
+			this.borrowedBy = borrowedBy;
+		}
+
+
+		public String getIssuedType() {
+			return issuedType;
+		}
+
+
+		public void setIssuedType(String issuedType) {
+			this.issuedType = issuedType;
+		}
+
+
+		public String getCategoryType() {
+			return categoryType;
+		}
+
+
+		public void setCategoryType(String categoryType) {
+			this.categoryType = categoryType;
+		}
+
+
+		public Date getIssueDate() {
+			return issueDate;
+		}
+
+
+		public void setIssueDate(Date issueDate) {
+			this.issueDate = issueDate;
+		}
+
+
+		public Date getExpectedReturnDate() {
+			return expectedReturnDate;
+		}
+
+
+		public void setExpectedReturnDate(Date expectedReturnDate) {
+			this.expectedReturnDate = expectedReturnDate;
+		}
+		
+		
 
 }

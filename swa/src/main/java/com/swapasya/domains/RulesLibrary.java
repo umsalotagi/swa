@@ -13,5 +13,7 @@ public class RulesLibrary {
 	private int maxTotalQuantity ; 
 	
 	private double finePerDay ; 
-
+	
+	
+	
 }

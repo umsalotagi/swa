@@ -7,35 +7,16 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.datastore.Category;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Email;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Link;
-import com.google.appengine.api.datastore.PhoneNumber;
-import com.google.appengine.api.datastore.PostalAddress;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.CompositeFilter;
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Rating;
-import com.google.appengine.api.datastore.Transaction;
-import com.google.appengine.api.datastore.TransactionOptions;
-import com.google.appengine.api.memcache.MemcacheService;
-import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.User;
+import org.springframework.data.mongodb.core.MongoAdmin;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.swapasya.dataTypes.BookProp;
 import com.swapasya.dataTypes.BookTitleProp;
@@ -44,30 +25,50 @@ import com.swapasya.dataTypes.NameKinds;
 import com.swapasya.dataTypes.PersonProp;
 import com.swapasya.dataTypes.RulesProp;
 import com.swapasya.dataTypes.TransactionHistoryProp;
+import com.swapasya.domains.Book;
+import com.swapasya.domains.BookTitle;
 
 public class GeneralFinal {
 
-	DB db;
-
+	//DB db;
+	MongoOperations mongoOps;
+	
 	public GeneralFinal(String nameSpace) {
 
 		try{
 			
 	         // To connect to mongodb server
-	         MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
-				
+			MongoClient mongoClient = new MongoClient("localhost", 27017);
+	         	
 	         // Now connect to your databases
-	         DB db = mongoClient.getDB( "test" );
+
+	         mongoOps = new MongoTemplate(mongoClient, "test");
 	         System.out.println("Connect to database successfully");
 	    //     boolean auth = db.authenticate(myUserName, myPassword);
 	    //     System.out.println("Authentication: "+auth);
-	         DBCollection coll = db.createCollection("mycol");
+
 	      }catch(Exception e){
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	      }
 
 	}
 
+	
+//    BasicDBObject doc = new BasicDBObject("title", "MongoDB").
+//            append(PersonProp.password, password).
+//            append(PersonProp.personName, firstName).
+//            append(PersonProp.address, address).
+//            append(PersonProp.emailId, emailId).
+//            append(PersonProp.mobileNo, mobileNo).
+//            append(PersonProp.contactNo, contactNo).
+//            append(PersonProp.degree, degree).
+//            append(PersonProp.branch, branch).
+//            append(PersonProp.courseyear, courseyear).
+//            append(PersonProp.rollNo, division + rollNo).
+//            append(PersonProp.role, role).
+//            append(PersonProp.admissionDate, admissionDate);
+//	person.insert(doc);
+	
 	public void addPersonDetails(String personID, String password, String firstName, String lastName, User gUser,
 			PostalAddress address, Email emailId, PhoneNumber mobileNo, PhoneNumber contactNo, String degree,
 			String branch, int courseyear, String division, int rollNo, ArrayList<String> booksInPossesion,
@@ -81,57 +82,39 @@ public class GeneralFinal {
 	      }catch(Exception e){
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	      }
-		 DBCollection person = db.getCollection("mycol");
-         System.out.println("Collection mycol selected successfully");
-         
-         BasicDBObject doc = new BasicDBObject("title", "MongoDB").
-                 append(PersonProp.password, password).
-                 append(PersonProp.personName, firstName).
-                 append(PersonProp.address, address).
-                 append(PersonProp.emailId, emailId).
-                 append(PersonProp.mobileNo, mobileNo).
-                 append(PersonProp.contactNo, contactNo).
-                 append(PersonProp.degree, degree).
-                 append(PersonProp.branch, branch).
-                 append(PersonProp.courseyear, courseyear).
-                 append(PersonProp.rollNo, division + rollNo).
-                 append(PersonProp.role, role).
-                 append(PersonProp.admissionDate, admissionDate);
-         
-		// person.setProperty("personID", personID);
-		// Transaction
-         
-         person.insert
 		
-		person.insert(doc);
+		 
+
 
 	}
 
-	public void addBookTitle(String bookTitleID, String isbnNumber, String bookName, String authour,
+	private void addBookTitleAndBook(String bookTitleID, String isbnNumber, String bookName, String authour,
 			String categoryType, String publication, float price, Date purchaseDate, String bindingType,
-			ArrayList<Category> tags, int noOfPages, String language, int noOfRenewAllowed, Rating rating,
-			Link imgPath) {
+			ArrayList<String> tags, int noOfPages, String language, String bookID ) {
+		
+		BookTitle bt = new BookTitle(bookTitleID, isbnNumber, bookName, authour, 
+				publication, bindingType, tags, noOfPages, language);
+		
+		Book b = new Book(bookID, purchaseDate, price, categoryType);
+		
+		if (bt!=null) {
+			bt.getBooks().add(b);
+			
+			mongoOps.insert(bt);
+		}
+		
 
-		Entity book = new Entity(NameKinds.BookTitle, bookTitleID);
-
-		book.setProperty(BookTitleProp.bookTitleID, bookTitleID);
-		book.setProperty(BookTitleProp.isbnNumber, isbnNumber); // long
-		book.setProperty(BookTitleProp.bookName, bookName);
-		book.setProperty(BookTitleProp.author, authour);
-		book.setProperty(BookTitleProp.publication, publication);
-
-		book.setUnindexedProperty(BookTitleProp.bindingType, bindingType);
-
-		book.setProperty(BookTitleProp.tags, tags);
-
-		book.setUnindexedProperty(BookTitleProp.noOfPages, noOfPages);
-		book.setProperty(BookTitleProp.language, language);
-
-		book.setProperty(BookTitleProp.rating, null);
-		book.setUnindexedProperty(BookTitleProp.imgPath, imgPath);
-		// Transaction
-
-		datastore.put(book);
+	}
+	
+	private void addBookTitle(String bookTitleID, String isbnNumber, String bookName, String authour,
+			String categoryType, String publication, float price, Date purchaseDate, String bindingType,
+			ArrayList<String> tags, int noOfPages, String language) {
+		
+		BookTitle bt = new BookTitle(bookTitleID, isbnNumber, bookName, authour, 
+				publication, bindingType, tags, noOfPages, language);
+		
+		
+		mongoOps.insert(bt);
 
 	}
 	
@@ -140,123 +123,38 @@ public class GeneralFinal {
 	// datastore.get throws exception EntityNotFoundException
 	
 	// if property does not exists it is returns null ( no exception thrown)
-
 	
-	
-    		
+	private void addBookInBookTitle(BookTitle bt, String bookID, String bookName, String authour,
+			String categoryType, float price, Date purchaseDate) {
 
-	private void addBookInBookTitle(Key bookTitleKey, String bookID, String isbnNumber, String bookName, String authour,
-			String categoryType, String publication, float price, Date purchaseDate, String bindingType,
-			ArrayList<Category> tags, int noOfPages, String language, int noOfRenewAllowed, Rating rating,
-			Link imgPath) {
-
-		Entity book = new Entity(NameKinds.Book, bookID, bookTitleKey);
-
-		book.setProperty(BookProp.bookID, bookID);
-
-		book.setProperty(BookProp.price, price); // float
-		book.setProperty(BookProp.purchaseDate, purchaseDate); // Date
-
-		book.setProperty(BookProp.borrowedBy, null); // keep key here
-		book.setProperty(BookProp.categoryType, categoryType); // ***mand
-
-		book.setProperty(BookProp.issuedType, null); // to be decided at runtime
-		book.setProperty(BookProp.issueDate, null); // Date
-		book.setProperty(BookProp.expectedReturnDate, null); // Date
-
-		// book.setProperty("noOfRenewAllowed", noOfRenewAllowed);
-
-		// Transaction
-
-		datastore.put(book);
-
+		Book b = new Book(bookID, purchaseDate, price, categoryType);
+		
+		if (bt!=null) {
+			bt.getBooks().add(b);
+			
+			mongoOps.insert(bt);
+		}
 	}
 
 	public void addBook(String bookID, String isbnNumber, String bookName, String authour, String categoryType,
-			String publication, float price, Date purchaseDate, String bindingType, ArrayList<Category> tags,
-			int noOfPages, String language, int noOfRenewAllowed, Rating rating, Link imgPath) {
-
-		Query q = new Query(NameKinds.BookTitle);
-		// q.addFilter(BookTitleProp.bookName, FilterOperator.EQUAL,
-		// bookName).addFilter(BookTitleProp.author, FilterOperator.EQUAL,
-		// authour);
-		Filter f = new FilterPredicate(BookTitleProp.bookName, FilterOperator.EQUAL, bookName);
-		Filter f2 = new FilterPredicate(BookTitleProp.author, FilterOperator.EQUAL, authour);
-		CompositeFilter fil = CompositeFilterOperator.and(f, f2);
-		q.setFilter(fil);
-
-		List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
-
-		String bookTitleID = "T_" + bookID;
-		Key parentKey = null;
-
-		if (results == null || results.isEmpty()) {
-
-			addBookTitle(bookTitleID, isbnNumber, bookName, authour, categoryType, publication, price, purchaseDate,
-					bindingType, tags, noOfPages, language, noOfRenewAllowed, rating, imgPath);
-
-			parentKey = KeyFactory.createKey(NameKinds.BookTitle, bookTitleID);
-			System.out.println("Not present : creating new book title" );
+			String publication, float price, Date purchaseDate, String bindingType, ArrayList<String> tags,
+			int noOfPages, String language) {
+		
+		
+		Query q = new Query();
+		q.addCriteria(new Criteria().where("bookName").is(bookName));
+		q.addCriteria(new Criteria().where("authour").is(authour));
+		
+		BookTitle bt = mongoOps.findOne(q , BookTitle.class);
+		
+		if (bt==null) {
+			String bookTitleID = "T_" + bookID;
+			addBookTitleAndBook(bookTitleID, isbnNumber, bookName, authour, categoryType, publication, price, 
+					purchaseDate, bindingType, tags, noOfPages, language, bookID);
 		} else {
-			
-			System.out.println("ALready present : " + results.get(0).getProperty(BookTitleProp.bookTitleID));
-
-			parentKey = results.get(0).getKey();
-
-		}
-
-		addBookInBookTitle(parentKey, bookID, isbnNumber, bookName, authour, categoryType, publication, price,
-				purchaseDate, bindingType, tags, noOfPages, language, noOfRenewAllowed, rating, imgPath);
-		
-		
-		/// Extra 
-		Query q2 = new Query(NameKinds.Book, parentKey).addSort(BookProp.bookID, SortDirection.DESCENDING);
-		List<Entity> results2 = datastore.prepare(q2).asList(FetchOptions.Builder.withDefaults());
-		System.out.println("Same books : ");
-		for (Entity temp : results2) {
-			System.out.println("      : " + temp.getProperty(BookProp.bookID));
+			addBookInBookTitle(bt, bookID, bookName, authour, categoryType, price, purchaseDate);
 		}
 		
-	}
-	
-	
-	public void addBookInBookTitle(String bookTitleID, String bookID, String bookName, String authour,
-			String categoryType, float price, Date purchaseDate) throws TransactionFailed {
-
-		
-		
-		Entity bookTitle;
-		try {
-			bookTitle = datastore.get(KeyFactory.createKey(NameKinds.BookTitle, bookTitleID));
-		} catch (EntityNotFoundException e) {
-			System.out.println("Title is not available");
-			throw new TransactionFailed();
-		}
-		
-		String titleName = (String) bookTitle.getProperty(BookTitleProp.bookName);
-		String titleAuthour = (String) bookTitle.getProperty(BookTitleProp.author);
-		
-		if (titleName!=bookName || titleAuthour!=authour) {
-			System.out.println("TitleBook is not same as given book");
-			throw new TransactionFailed();
-		}
-		
-		Entity book = new Entity(NameKinds.Book, bookID, bookTitle.getKey());
-
-		book.setProperty(BookProp.bookID, bookID);
-
-		book.setProperty(BookProp.price, price); // float
-		book.setProperty(BookProp.purchaseDate, purchaseDate); // Date
-
-		book.setProperty(BookProp.borrowedBy, null); // keep key here
-		book.setProperty(BookProp.categoryType, categoryType); // ***mand
-
-		book.setProperty(BookProp.issuedType, null); // to be decided at runtime
-		book.setProperty(BookProp.issueDate, null); // Date
-		book.setProperty(BookProp.expectedReturnDate, null); // Date
-
-		datastore.put(book);
-
 	}
 	
 
