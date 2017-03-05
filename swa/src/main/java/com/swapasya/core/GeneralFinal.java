@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoAdmin;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -16,8 +17,14 @@ import org.springframework.data.mongodb.core.query.Query;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.swapasya.dataTypes.BookProp;
 import com.swapasya.dataTypes.BookTitleProp;
 import com.swapasya.dataTypes.GenProp;
@@ -31,7 +38,8 @@ import com.swapasya.domains.BookTitle;
 public class GeneralFinal {
 
 	//DB db;
-	MongoOperations mongoOps;
+//	MongoOperations mongoOps;
+	MongoDatabase db;
 	
 	public GeneralFinal(String nameSpace) {
 
@@ -39,10 +47,12 @@ public class GeneralFinal {
 			
 	         // To connect to mongodb server
 			MongoClient mongoClient = new MongoClient("localhost", 27017);
+			
+			db = mongoClient.getDatabase("test");
 	         	
 	         // Now connect to your databases
 
-	         mongoOps = new MongoTemplate(mongoClient, "test");
+	     //    mongoOps = new MongoTemplate(mongoClient, "test");
 	         System.out.println("Connect to database successfully");
 	    //     boolean auth = db.authenticate(myUserName, myPassword);
 	    //     System.out.println("Authentication: "+auth);
@@ -52,25 +62,20 @@ public class GeneralFinal {
 	      }
 
 	}
+	
+	void firstSetup () {
+		db.createCollection(NameKinds.Person);
+		db.createCollection(NameKinds.BookTitle);
+		db.createCollection(NameKinds.roleWiseRules);
+		db.createCollection(NameKinds.TransactionHistory);
+		db.createCollection(NameKinds.LibraryAdmin);
+	}
 
 	
-//    BasicDBObject doc = new BasicDBObject("title", "MongoDB").
-//            append(PersonProp.password, password).
-//            append(PersonProp.personName, firstName).
-//            append(PersonProp.address, address).
-//            append(PersonProp.emailId, emailId).
-//            append(PersonProp.mobileNo, mobileNo).
-//            append(PersonProp.contactNo, contactNo).
-//            append(PersonProp.degree, degree).
-//            append(PersonProp.branch, branch).
-//            append(PersonProp.courseyear, courseyear).
-//            append(PersonProp.rollNo, division + rollNo).
-//            append(PersonProp.role, role).
-//            append(PersonProp.admissionDate, admissionDate);
-//	person.insert(doc);
+    
 	
-	public void addPersonDetails(String personID, String password, String firstName, String lastName, User gUser,
-			PostalAddress address, Email emailId, PhoneNumber mobileNo, PhoneNumber contactNo, String degree,
+	public void addPersonDetails(String personID, String password, String firstName, String lastName,
+			String address, String emailId, long mobileNo, String degree,
 			String branch, int courseyear, String division, int rollNo, ArrayList<String> booksInPossesion,
 			boolean isBookBankEnabled, String bookBankID, String role, Date admissionDate) {
 
@@ -78,6 +83,21 @@ public class GeneralFinal {
 				
 	    //     boolean auth = db.authenticate(myUserName, myPassword);
 	    //     System.out.println("Authentication: "+auth);
+			MongoCollection<Document> personColl = db.getCollection(NameKinds.Person);
+			Document doc = new Document("_id", "personID").
+					append(PersonProp.personID, "personID").
+		            append(PersonProp.password, password).
+		            append(PersonProp.personName, firstName).
+		            append(PersonProp.address, address).
+		            append(PersonProp.emailId, emailId).
+		            append(PersonProp.mobileNo, mobileNo).
+		            append(PersonProp.degree, degree).
+		            append(PersonProp.branch, branch).
+		            append(PersonProp.courseyear, courseyear).
+		            append(PersonProp.rollNo, division + rollNo).
+		            append(PersonProp.role, role).
+		            append(PersonProp.admissionDate, admissionDate);
+			personColl.insertOne(doc);
 
 	      }catch(Exception e){
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -92,16 +112,33 @@ public class GeneralFinal {
 			String categoryType, String publication, float price, Date purchaseDate, String bindingType,
 			ArrayList<String> tags, int noOfPages, String language, String bookID ) {
 		
-		BookTitle bt = new BookTitle(bookTitleID, isbnNumber, bookName, authour, 
-				publication, bindingType, tags, noOfPages, language);
+		MongoCollection<Document>  bookTitleColl = db.getCollection(NameKinds.BookTitle);
 		
-		Book b = new Book(bookID, purchaseDate, price, categoryType);
+		Document  bookTitledoc = new Document ("_id", "bookTitleID").
+				append(BookTitleProp.bookTitleID, bookTitleID).
+				append(BookTitleProp.bookName, bookName).
+				append(BookTitleProp.authour, authour).
+				append(BookTitleProp.publication, publication).
+				append(BookTitleProp.bindingType, bindingType).
+				append(BookTitleProp.tags, tags).
+				append(BookTitleProp.noOfPages, noOfPages).
+				append(BookTitleProp.language, language).
+				append(BookTitleProp.bookName, bookName);
 		
-		if (bt!=null) {
-			bt.getBooks().add(b);
+		
+		BasicDBObject doc2 = new BasicDBObject("_id", bookID).
+				append(BookProp.bookID, bookID).
+				append(BookProp.purchaseDate, purchaseDate).
+				append(BookProp.price, price).
+				append(BookProp.categoryType, categoryType);
+		
+
+		ArrayList<BasicDBObject> b2 =  new ArrayList<BasicDBObject>();
+		b2.add(doc2);
+		bookTitledoc.append("books", b2);
 			
-			mongoOps.insert(bt);
-		}
+		bookTitleColl.insertOne(bookTitledoc);
+
 		
 
 	}
@@ -114,7 +151,7 @@ public class GeneralFinal {
 				publication, bindingType, tags, noOfPages, language);
 		
 		
-		mongoOps.insert(bt);
+	//	db.insertOne(bt);
 
 	}
 	
@@ -124,15 +161,23 @@ public class GeneralFinal {
 	
 	// if property does not exists it is returns null ( no exception thrown)
 	
-	private void addBookInBookTitle(BookTitle bt, String bookID, String bookName, String authour,
+	private void addBookInBookTitle(Document bt, String bookID, String bookName, String authour,
 			String categoryType, float price, Date purchaseDate) {
+		
+		MongoCollection<Document> bookTitleColl = db.getCollection(NameKinds.BookTitle);
 
-		Book b = new Book(bookID, purchaseDate, price, categoryType);
+		BasicDBObject doc2 = new BasicDBObject("_id", bookID).
+				append(BookProp.bookID, bookID).
+				append(BookProp.purchaseDate, purchaseDate).
+				append(BookProp.price, price).
+				append(BookProp.categoryType, categoryType);
 		
 		if (bt!=null) {
-			bt.getBooks().add(b);
-			
-			mongoOps.insert(bt);
+			ArrayList<BasicDBObject> b2 =  (ArrayList<BasicDBObject>) bt.get("books");
+			b2.add(doc2);
+			bt.append("book", b2);
+		//	db.insert(bt);
+			bookTitleColl.insertOne(bt);
 		}
 	}
 
@@ -140,12 +185,9 @@ public class GeneralFinal {
 			String publication, float price, Date purchaseDate, String bindingType, ArrayList<String> tags,
 			int noOfPages, String language) {
 		
-		
-		Query q = new Query();
-		q.addCriteria(new Criteria().where("bookName").is(bookName));
-		q.addCriteria(new Criteria().where("authour").is(authour));
-		
-		BookTitle bt = mongoOps.findOne(q , BookTitle.class);
+		MongoCollection<Document> bookTitleColl = db.getCollection(NameKinds.BookTitle);
+         
+         Document bt = bookTitleColl.find(Filters.and(Filters.eq("bookName", bookName),Filters.eq("authour", authour))).first();
 		
 		if (bt==null) {
 			String bookTitleID = "T_" + bookID;
@@ -157,7 +199,7 @@ public class GeneralFinal {
 		
 	}
 	
-
+/*
 	// this will be without any namespace.... YET TO CREATEEEEEE
 	public void libraryAdmin(String collegeID) {
 
@@ -179,66 +221,75 @@ public class GeneralFinal {
 		
 		datastore.put(roleDefine);
 	}
-
+*/
 	public void issueWiseRules(String readerType, String issueType, int bookQuantityLimit, 
 			int dayLimitForEachBook , float finePerDay) {
+		
+		MongoCollection<Document> rule = db.getCollection(NameKinds.Rules);
 
-		Entity issueWiseRules = new Entity(NameKinds.Rules, readerType + "-" + issueType);
+		Document doc2 = new Document("_id", readerType + "-" + issueType).
+				append(RulesProp.readerType_BkCatORissueType, readerType + "-" + issueType).
+				append(RulesProp.dayLimit, (int) dayLimitForEachBook).
+				append(RulesProp.maxQuantity, (int) bookQuantityLimit).append(RulesProp.finePerDay, finePerDay);
 
-		issueWiseRules.setProperty(RulesProp.readerType_BkCatORissueType, readerType + "-" + issueType);
-		issueWiseRules.setProperty(RulesProp.dayLimit, (int) dayLimitForEachBook);
-		// Not always necessary
-		issueWiseRules.setProperty(RulesProp.maxQuantity, (int) bookQuantityLimit); 
-		issueWiseRules.setProperty(RulesProp.finePerDay, finePerDay);
-
-		datastore.put(issueWiseRules);
+		rule.insertOne(doc2);
 
 	}
 	
 	public void issueWiseRules (String readerType, String issueType,  int dayLimitForEachBook , float finePerDay) {
 		
-		Entity issueWiseRules = new Entity(NameKinds.Rules, readerType +"-"+ issueType);
+		MongoCollection<Document> rule = db.getCollection(NameKinds.Rules);
+
+		Document doc2 = new Document("_id", readerType + "-" + issueType).
+				append(RulesProp.readerType_BkCatORissueType, readerType + "-" + issueType).
+				append(RulesProp.dayLimit, (int) dayLimitForEachBook);
 		
-		issueWiseRules.setProperty(RulesProp.readerType_BkCatORissueType, readerType +"-"+ issueType);
-		issueWiseRules.setProperty(RulesProp.dayLimit,(int) dayLimitForEachBook);
-		
-		//specific to person ?
-		
-		datastore.put(issueWiseRules);
+			rule.insertOne(doc2);
 		
 	}
 
 	public void categoryWiseRules(String readerType, String bookCategory,  int bookQuantityLimit,
 			int dayLimitForEachBook, int maxTotalQuantity, float finePerDay) {
 
-		Entity categoryWiseRules = new Entity(NameKinds.Rules, readerType + "-" + bookCategory);
+		MongoCollection<Document> rule = db.getCollection(NameKinds.Rules);
 
-		categoryWiseRules.setProperty(RulesProp.readerType_BkCatORissueType, readerType + "-" + bookCategory);
-		categoryWiseRules.setProperty(RulesProp.dayLimit, (int) dayLimitForEachBook);
-		categoryWiseRules.setProperty(RulesProp.maxQuantity, (int) bookQuantityLimit);
-		categoryWiseRules.setProperty(RulesProp.maxTotalQuantity, (int) maxTotalQuantity); //
-		categoryWiseRules.setProperty(RulesProp.finePerDay, finePerDay);
+		Document doc2 = new Document("_id", readerType + "-" + bookCategory).
+				append(RulesProp.readerType_BkCatORissueType, readerType + "-" + bookCategory).
+				append(RulesProp.dayLimit, (int) dayLimitForEachBook).
+				append(RulesProp.maxQuantity, (int) bookQuantityLimit).append(RulesProp.finePerDay, finePerDay).
+				append(RulesProp.maxTotalQuantity, (int) maxTotalQuantity); 
 
-		datastore.put(categoryWiseRules);
+		rule.insertOne(doc2);
 
 	}
 	
 	
 	public void categoryWiseRules (String readerType, String bookCategory,  int bookQuantityLimit , int dayLimitForEachBook, float finePerDay ) {
 		 
-		Entity categoryWiseRules = new Entity(NameKinds.Rules, readerType +"-"+ bookCategory);
+		MongoCollection<Document> rule = db.getCollection(NameKinds.Rules);
+
+		Document doc2 = new Document("_id", readerType + "-" + bookCategory).
+				append(RulesProp.readerType_BkCatORissueType, readerType + "-" + bookCategory).
+				append(RulesProp.dayLimit, (int) dayLimitForEachBook).
+				append(RulesProp.maxQuantity, (int) bookQuantityLimit).append(RulesProp.finePerDay, finePerDay);
 		
-		categoryWiseRules.setProperty(RulesProp.readerType_BkCatORissueType, readerType +"-"+ bookCategory);
-		categoryWiseRules.setProperty(RulesProp.dayLimit,(int) dayLimitForEachBook);
-		categoryWiseRules.setProperty(RulesProp.maxQuantity, (int) bookQuantityLimit);
-		categoryWiseRules.setProperty(RulesProp.finePerDay, finePerDay);
-		
-		datastore.put(categoryWiseRules);
+				rule.insertOne(doc2);
 		
 	}
 	
 	
-	public int availableBooksInTitle (Key bookTitleKey) {
+	public int availableBooksInTitle (String bookTitleKey) {
+		
+		MongoCollection<Document> bookTitleColl = db.getCollection(NameKinds.BookTitle);
+        
+        Document bt = bookTitleColl.find(Filters.eq("_id", bookTitleKey)).first();
+        
+        ArrayList<Document> d = (ArrayList<Document>) bt.get("books");
+        
+        Document bt = bookTitleColl.find(Filters.and(Filters.eq("bookName", bookName),Filters.eq("authour", authour))).first();
+		
+
+
 		Filter f = new FilterPredicate(BookProp.borrowedBy, FilterOperator.EQUAL, null);
 		Query q = new Query(NameKinds.Book, bookTitleKey).setFilter(f).setKeysOnly();
 		int results = datastore.prepare(q).countEntities();
@@ -246,7 +297,7 @@ public class GeneralFinal {
 	}
 	
 	
-	public int numberOfAssigneeToTitle (Key bookTitleKey) {
+	public int numberOfAssigneeToTitle (String bookTitleKey) {
 		Query q2 = new Query(NameKinds.AssignList, bookTitleKey).setKeysOnly();
 		int results2 = datastore.prepare(q2).countEntities();
 		return results2;
