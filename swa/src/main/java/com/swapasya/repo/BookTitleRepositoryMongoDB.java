@@ -1,12 +1,14 @@
 package com.swapasya.repo;
 
 import java.io.Serializable;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
+
 
 import com.swapasya.domains.BookTitle;
 
@@ -27,38 +29,37 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository
 		Assert.notNull(operations);
 		this.operations = operations;
 	}
-	/*
-	public BookTitle findOne(Long id) {
-		Query query = Query.query(Criteria.where("id").is(id));
-		return operations.findOne(query, BookTitle.class);
-	}
-	
-	public BookTitle save(BookTitle bookTitle) {
-		operations.save(bookTitle);
-		return bookTitle;
-	}*/
+
 
 	@Override
 	public long count() {
 		// TODO Auto-generated method stub
-		return 0;
+		List<BookTitle> list=operations.findAll(BookTitle.class);
+		return list.size();
+
+		
 	}
 
 	@Override
-	public void delete(Long id) {
-		// TODO Auto-generated method stub
+	public void delete(String id) {
+		
+		operations.remove(id);
+
 		
 	}
 
 	@Override
 	public void delete(BookTitle bookTitle) {
-		// TODO Auto-generated method stub
+		
+		operations.remove(bookTitle);
 		
 	}
 
 	@Override
 	public void delete(Iterable<? extends BookTitle> iterable) {
-		// TODO Auto-generated method stub
+		
+		
+		operations.remove(iterable);
 		
 	}
 
@@ -69,7 +70,7 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository
 	}
 
 	@Override
-	public boolean exists(Long id) {
+	public boolean exists(String id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -77,17 +78,27 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository
 	@Override
 	public Iterable<BookTitle> findAll() {
 		// TODO Auto-generated method stub
-		return null;
+		return operations.findAll(BookTitle.class);
 	}
 
 	@Override
-	public Iterable<BookTitle> findAll(Iterable<Long> iterable) {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterable<BookTitle> findAll(Iterable<String> list) {
+		Iterator<String> i=list.iterator();
+		List<BookTitle> l=new ArrayList<>();
+		while(i.hasNext())
+		{
+			
+			Query q=new Query(Criteria.where("bookTitleID").is(i));
+			BookTitle b=operations.findOne(q, BookTitle.class);
+			l.add(b);
+		}
+		
+		
+		return l;
 	}
 
 	@Override
-	public BookTitle findOne(Long id) {
+	public BookTitle findOne(String id) {
 		Query query = Query.query(Criteria.where("id").is(id));
 		return operations.findOne(query, BookTitle.class);
 		
@@ -100,9 +111,17 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository
 	}
 
 	@Override
-	public <S extends BookTitle> Iterable<S> save(Iterable<S> iterable) {
-		// TODO Auto-generated method stub
-		return null;
+	public <S extends BookTitle> Iterable<S> save(Iterable<S> list) {
+		
+		
+		Iterator<S> i=list.iterator();
+		while(i.hasNext())
+		{
+			BookTitle bookTitle=i.next();
+			operations.save(bookTitle);
+			
+		}
+		return list;
 	}
 	
 	

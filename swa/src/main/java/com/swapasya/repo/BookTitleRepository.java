@@ -15,6 +15,6 @@ import com.swapasya.domains.BookTitle;
 
 @Repository
 @Profile("mongodb")
-public interface BookTitleRepository  extends CrudRepository<BookTitle, Long>{
+public interface BookTitleRepository  extends CrudRepository<BookTitle, String>{
 	
 }
