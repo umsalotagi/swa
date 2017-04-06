@@ -10,7 +10,7 @@ public class BookTitleProp {
 		public static final String bookTitleID = "bookTitleID";   //  ***Mand
 		public static final String isbnNumber = "isbnNumber";
 		public static final String bookName = "bookName";    //  ***Mand
-		public static final String author="author";       //  ***Mand
+		public static final String authour="authour";       //  ***Mand
 		public static final String publication="publication";   
 		
 		public static final String purchaseDate = "purchaseDate";

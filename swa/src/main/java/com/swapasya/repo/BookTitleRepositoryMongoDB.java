@@ -1,7 +1,8 @@
 package com.swapasya.repo;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -9,19 +10,18 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
 
-
 import com.swapasya.domains.BookTitle;
 
-public class BookTitleRepositoryMongoDB implements BookTitleRepository
-{
-
+public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
 	private final MongoOperations operations;
-	
+
 	/**
-	 * Creates a new {@link MongoDbCustomerRepository} using the given {@link MongoOperations}.
+	 * Creates a new {@link MongoDbCustomerRepository} using the given
+	 * {@link MongoOperations}.
 	 * 
-	 * @param operations must not be {@literal null}.
+	 * @param operations
+	 *            must not be {@literal null}.
 	 */
 	@Autowired
 	public BookTitleRepositoryMongoDB(MongoOperations operations) {
@@ -30,35 +30,25 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository
 		this.operations = operations;
 	}
 
-
 	@Override
 	public long count() {
-		// TODO Auto-generated method stub
-		List<BookTitle> list=operations.findAll(BookTitle.class);
+		List<BookTitle> list = operations.findAll(BookTitle.class);
 		return list.size();
-
-		
 	}
 
 	@Override
 	public void delete(String id) {
-		
 		operations.remove(id);
-
-		
 	}
 
 	@Override
 	public void delete(BookTitle bookTitle) {
-		
 		operations.remove(bookTitle);
 		
 	}
 
 	@Override
 	public void delete(Iterable<? extends BookTitle> iterable) {
-		
-		
 		operations.remove(iterable);
 		
 	}
@@ -66,7 +56,7 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -77,31 +67,29 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository
 
 	@Override
 	public Iterable<BookTitle> findAll() {
-		// TODO Auto-generated method stub
 		return operations.findAll(BookTitle.class);
+		
 	}
 
 	@Override
-	public Iterable<BookTitle> findAll(Iterable<String> list) {
-		Iterator<String> i=list.iterator();
-		List<BookTitle> l=new ArrayList<>();
-		while(i.hasNext())
-		{
-			
-			Query q=new Query(Criteria.where("bookTitleID").is(i));
-			BookTitle b=operations.findOne(q, BookTitle.class);
+	public Iterable<BookTitle> findAll(Iterable<String> bookTitleIDlist) {
+		Iterator<String> i = bookTitleIDlist.iterator();
+		List<BookTitle> l = new ArrayList<>();
+		while (i.hasNext()) {
+
+			Query q = new Query(Criteria.where("bookTitleID").is(i));
+			BookTitle b = operations.findOne(q, BookTitle.class);
 			l.add(b);
 		}
-		
-		
+
 		return l;
 	}
 
 	@Override
 	public BookTitle findOne(String id) {
-		Query query = Query.query(Criteria.where("id").is(id));
+		Query query = Query.query(Criteria.where("bookTitleID").is(id));
 		return operations.findOne(query, BookTitle.class);
-		
+
 	}
 
 	@Override
@@ -112,20 +100,13 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository
 
 	@Override
 	public <S extends BookTitle> Iterable<S> save(Iterable<S> list) {
-		
-		
-		Iterator<S> i=list.iterator();
-		while(i.hasNext())
-		{
-			BookTitle bookTitle=i.next();
+		Iterator<S> i = list.iterator();
+		while (i.hasNext()) {
+			BookTitle bookTitle = i.next();
 			operations.save(bookTitle);
-			
+
 		}
 		return list;
 	}
-	
-	
 
-	
-	
 }

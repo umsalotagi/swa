@@ -1,31 +1,48 @@
 package com.swapasya.repo;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.util.Assert;
+
 import com.swapasya.domains.Person;
 
 public class PersonRepositoryMongoDB implements PersonRepository 
 {
+	
+	private final MongoOperations operations;
+	
+	public PersonRepositoryMongoDB(MongoOperations operations) {
 
+		Assert.notNull(operations);
+		this.operations = operations;
+	}
+	
 	@Override
 	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+		List<Person> list = operations.findAll(Person.class);
+		return list.size();
 	}
 
 	@Override
-	public void delete(String arg0) {
-		// TODO Auto-generated method stub
+	public void delete(String id) {
+		operations.remove(id);
 		
 	}
 
 	@Override
-	public void delete(Person arg0) {
-		// TODO Auto-generated method stub
+	public void delete(Person person) {
+		operations.remove(person);
 		
 	}
 
 	@Override
-	public void delete(Iterable<? extends Person> arg0) {
-		// TODO Auto-generated method stub
+	public void delete(Iterable<? extends Person> iterable) {
+		operations.remove(iterable);
 		
 	}
 
@@ -43,32 +60,44 @@ public class PersonRepositoryMongoDB implements PersonRepository
 
 	@Override
 	public Iterable<Person> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return operations.findAll(Person.class);
 	}
 
 	@Override
-	public Iterable<Person> findAll(Iterable<String> arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterable<Person> findAll(Iterable<String> personIDlist) {
+		Iterator<String> i = personIDlist.iterator();
+		List<Person> l = new ArrayList<>();
+		while (i.hasNext()) {
+
+			Query q = new Query(Criteria.where("personID").is(i));
+			Person b = operations.findOne(q, Person.class);
+			l.add(b);
+		}
+
+		return l;
 	}
 
 	@Override
-	public Person findOne(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Person findOne(String id) {
+		Query query = Query.query(Criteria.where("personID").is(id));
+		return operations.findOne(query, Person.class);
 	}
 
 	@Override
-	public <S extends Person> S save(S arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public <S extends Person> S save(S person) {
+		operations.save(person);
+		return person;
 	}
 
 	@Override
-	public <S extends Person> Iterable<S> save(Iterable<S> arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public <S extends Person> Iterable<S> save(Iterable<S> list) {
+		Iterator<S> i = list.iterator();
+		while (i.hasNext()) {
+			Person person = i.next();
+			operations.save(person);
+
+		}
+		return list;
 	}
 
 }

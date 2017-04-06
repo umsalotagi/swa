@@ -35,13 +35,13 @@ import com.swapasya.dataTypes.TransactionHistoryProp;
 import com.swapasya.domains.Book;
 import com.swapasya.domains.BookTitle;
 
-public class GeneralFinal {
+public class GeneralFinal2 {
 
-
+	//DB db;
 //	MongoOperations mongoOps;
 	MongoDatabase db;
 	
-	public GeneralFinal(String nameSpace) {
+	public GeneralFinal2(String nameSpace) {
 
 		try{
 			
@@ -59,7 +59,8 @@ public class GeneralFinal {
 
 	      }catch(Exception e){
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	      
+	      }
+
 	}
 	
 	void firstSetup () {
