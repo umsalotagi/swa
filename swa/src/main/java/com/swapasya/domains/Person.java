@@ -12,31 +12,278 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "Person")
 public class Person {
- @Id
- private String personID;
- private String password;
- @Indexed
- private String personName;
- private String address; /////
-// private String gUser;
- private String emailId;
- private long mobileNo;
- private long contactNo;
- private String degree;
- private String branch;
- private int courseyear;
- private String division;
- private String rollNo;
- private String role;
- private Date admissionDate;
-// private String inPossession; // depricated
- //private String totalCategoryBksInPossesion;
- 
- 
- 
- @Override
- public String toString() {
-  return "Person [personID=" + personID + ", personName=" + personName + ", rollNo="
-    + rollNo + ", branch=" + branch + "]";
- }
+	@Id
+	private String personID;
+	private String password;
+	@Indexed
+	private String personName;
+
+	// private String gUser;
+	private String emailId;
+	private long mobileNo;
+	private long contactNo;
+	private String degree;
+	private String branch;
+	private int courseyear;
+	private String division;
+	private String rollNo;
+	private String role;
+	private Date admissionDate;
+
+	private Address permanentAddress; /////
+	private Address currentAddress; /////
+	// private String inPossession; // depricated
+	// private String totalCategoryBksInPossesion;
+
+	/**
+	 * 
+	 * @param password
+	 * @param personName
+	 * @param emailId
+	 * @param mobileNo
+	 * @param contactNo
+	 * @param degree
+	 * @param branch
+	 * @param courseyear
+	 * @param division
+	 * @param rollNo
+	 * @param admissionDate
+	 * @param permanentAddress
+	 * @param currentAddress
+	 */
+	public Person(String password, String personName, String emailId, long mobileNo, long contactNo, String degree,
+			String branch, int courseyear, String division, String rollNo, Date admissionDate, Address permanentAddress,
+			Address currentAddress) {
+		super();
+		this.password = password;
+		this.personName = personName;
+		this.emailId = emailId;
+		this.mobileNo = mobileNo;
+		this.contactNo = contactNo;
+		this.degree = degree;
+		this.branch = branch;
+		this.courseyear = courseyear;
+		this.division = division;
+		this.rollNo = rollNo;
+		this.admissionDate = admissionDate;
+		this.permanentAddress = permanentAddress;
+		this.currentAddress = currentAddress;
+	}
+
+	/**
+	 * @return the personID
+	 */
+	public String getPersonID() {
+		return personID;
+	}
+
+	/**
+	 * @param personID
+	 *            the personID to set
+	 */
+	public void setPersonID(String personID) {
+		this.personID = personID;
+	}
+
+	/**
+	 * @return the personName
+	 */
+	public String getPersonName() {
+		return personName;
+	}
+
+	/**
+	 * @param personName
+	 *            the personName to set
+	 */
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
+
+	/**
+	 * @return the emailId
+	 */
+	public String getEmailId() {
+		return emailId;
+	}
+
+	/**
+	 * @param emailId
+	 *            the emailId to set
+	 */
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+	/**
+	 * @return the mobileNo
+	 */
+	public long getMobileNo() {
+		return mobileNo;
+	}
+
+	/**
+	 * @param mobileNo
+	 *            the mobileNo to set
+	 */
+	public void setMobileNo(long mobileNo) {
+		this.mobileNo = mobileNo;
+	}
+
+	/**
+	 * @return the contactNo
+	 */
+	public long getContactNo() {
+		return contactNo;
+	}
+
+	/**
+	 * @param contactNo
+	 *            the contactNo to set
+	 */
+	public void setContactNo(long contactNo) {
+		this.contactNo = contactNo;
+	}
+
+	/**
+	 * @return the degree
+	 */
+	public String getDegree() {
+		return degree;
+	}
+
+	/**
+	 * @param degree
+	 *            the degree to set
+	 */
+	public void setDegree(String degree) {
+		this.degree = degree;
+	}
+
+	/**
+	 * @return the branch
+	 */
+	public String getBranch() {
+		return branch;
+	}
+
+	/**
+	 * @param branch
+	 *            the branch to set
+	 */
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	/**
+	 * @return the courseyear
+	 */
+	public int getCourseyear() {
+		return courseyear;
+	}
+
+	/**
+	 * @param courseyear
+	 *            the courseyear to set
+	 */
+	public void setCourseyear(int courseyear) {
+		this.courseyear = courseyear;
+	}
+
+	/**
+	 * @return the division
+	 */
+	public String getDivision() {
+		return division;
+	}
+
+	/**
+	 * @param division
+	 *            the division to set
+	 */
+	public void setDivision(String division) {
+		this.division = division;
+	}
+
+	/**
+	 * @return the rollNo
+	 */
+	public String getRollNo() {
+		return rollNo;
+	}
+
+	/**
+	 * @param rollNo
+	 *            the rollNo to set
+	 */
+	public void setRollNo(String rollNo) {
+		this.rollNo = rollNo;
+	}
+
+	/**
+	 * @return the role
+	 */
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role
+	 *            the role to set
+	 */
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	/**
+	 * @return the admissionDate
+	 */
+	public Date getAdmissionDate() {
+		return admissionDate;
+	}
+
+	/**
+	 * @param admissionDate
+	 *            the admissionDate to set
+	 */
+	public void setAdmissionDate(Date admissionDate) {
+		this.admissionDate = admissionDate;
+	}
+
+	/**
+	 * @return the permanentAddress
+	 */
+	public Address getPermanentAddress() {
+		return permanentAddress;
+	}
+
+	/**
+	 * @param permanentAddress
+	 *            the permanentAddress to set
+	 */
+	public void setPermanentAddress(Address permanentAddress) {
+		this.permanentAddress = permanentAddress;
+	}
+
+	/**
+	 * @return the currentAddress
+	 */
+	public Address getCurrentAddress() {
+		return currentAddress;
+	}
+
+	/**
+	 * @param currentAddress
+	 *            the currentAddress to set
+	 */
+	public void setCurrentAddress(Address currentAddress) {
+		this.currentAddress = currentAddress;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [personID=" + personID + ", personName=" + personName + ", rollNo=" + rollNo + ", branch="
+				+ branch + "]";
+	}
+
 }

@@ -23,7 +23,7 @@ public class TransactionHistory {
 	private String bookTitleID ;
 	private double fineCollected ;
 	@Indexed
-	private String person;
+	private String personID;
 	@Indexed
 	private int courseyear ;
 	@Indexed
@@ -33,5 +33,7 @@ public class TransactionHistory {
 	private String renewIndex = "renewIndex";
 	private String bookName ;
 	private String authour ;
-
+	// role of issuer
+	
+	
 }
