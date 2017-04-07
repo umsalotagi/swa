@@ -21,7 +21,7 @@ public class Person {
 	// private String gUser;
 	private String emailId;
 	private long mobileNo;
-	private long contactNo;
+
 	private String degree;
 	private String branch;
 	private int courseyear;
@@ -30,44 +30,84 @@ public class Person {
 	private String role;
 	private Date admissionDate;
 
+	private String parentName;
+	private long parentContactNo;
+
 	private Address permanentAddress; /////
 	private Address currentAddress; /////
 	// private String inPossession; // depricated
 	// private String totalCategoryBksInPossesion;
 
 	/**
+	 * Full constructor
 	 * 
+	 * @param personID
 	 * @param password
 	 * @param personName
 	 * @param emailId
 	 * @param mobileNo
-	 * @param contactNo
 	 * @param degree
 	 * @param branch
 	 * @param courseyear
 	 * @param division
 	 * @param rollNo
+	 * @param role
 	 * @param admissionDate
+	 * @param parentName
+	 * @param parentContactNo
 	 * @param permanentAddress
 	 * @param currentAddress
 	 */
-	public Person(String password, String personName, String emailId, long mobileNo, long contactNo, String degree,
-			String branch, int courseyear, String division, String rollNo, Date admissionDate, Address permanentAddress,
-			Address currentAddress) {
+	public Person(String personID, String password, String personName, String emailId, long mobileNo, String degree,
+			String branch, int courseyear, String division, String rollNo, String role, Date admissionDate,
+			String parentName, long parentContactNo, Address permanentAddress, Address currentAddress) {
 		super();
+		this.personID = personID;
 		this.password = password;
 		this.personName = personName;
 		this.emailId = emailId;
 		this.mobileNo = mobileNo;
-		this.contactNo = contactNo;
 		this.degree = degree;
 		this.branch = branch;
 		this.courseyear = courseyear;
 		this.division = division;
 		this.rollNo = rollNo;
+		this.role = role;
 		this.admissionDate = admissionDate;
+		this.parentName = parentName;
+		this.parentContactNo = parentContactNo;
 		this.permanentAddress = permanentAddress;
 		this.currentAddress = currentAddress;
+	}
+
+	/**
+	 * @return the parentName
+	 */
+	public String getParentName() {
+		return parentName;
+	}
+
+	/**
+	 * @param parentName
+	 *            the parentName to set
+	 */
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	/**
+	 * @return the parentContactNo
+	 */
+	public long getParentContactNo() {
+		return parentContactNo;
+	}
+
+	/**
+	 * @param parentContactNo
+	 *            the parentContactNo to set
+	 */
+	public void setParentContactNo(long parentContactNo) {
+		this.parentContactNo = parentContactNo;
 	}
 
 	/**
@@ -128,21 +168,6 @@ public class Person {
 	 */
 	public void setMobileNo(long mobileNo) {
 		this.mobileNo = mobileNo;
-	}
-
-	/**
-	 * @return the contactNo
-	 */
-	public long getContactNo() {
-		return contactNo;
-	}
-
-	/**
-	 * @param contactNo
-	 *            the contactNo to set
-	 */
-	public void setContactNo(long contactNo) {
-		this.contactNo = contactNo;
 	}
 
 	/**
