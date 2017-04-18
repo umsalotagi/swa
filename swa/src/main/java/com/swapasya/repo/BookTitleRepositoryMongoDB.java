@@ -67,6 +67,7 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
 	@Override
 	public Iterable<BookTitle> findAll() {
+		
 		return operations.findAll(BookTitle.class);
 		
 	}
@@ -86,8 +87,8 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 	}
 
 	@Override
-	public BookTitle findOne(String id) {
-		Query query = Query.query(Criteria.where("bookTitleID").is(id));
+	public BookTitle findOne(String bookTitleID) {
+		Query query = Query.query(Criteria.where("bookTitleID").is(bookTitleID));
 		return operations.findOne(query, BookTitle.class);
 
 	}
@@ -107,6 +108,41 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
 		}
 		return list;
+	}
+
+	@Override
+	public List<BookTitle> findByBookTitle(String bookTitle) {
+		Query query = Query.query(Criteria.where("bookName").is(bookTitle));
+		return operations.find(query, BookTitle.class);
+
+	}
+
+	@Override
+	public List<BookTitle> findByTag(String tag) {
+		Query query = Query.query(Criteria.where("tag").is(tag));
+		return operations.find(query, BookTitle.class);
+
+	}
+
+	@Override
+	public List<BookTitle> findByAuthor(String author) {
+		Query query = Query.query(Criteria.where("author").is(author));
+		return operations.find(query, BookTitle.class);
+
+	}
+
+	@Override
+	public List<BookTitle> findByPublication(String publication) {
+		Query query = Query.query(Criteria.where("publication").is(publication));
+		return operations.find(query, BookTitle.class);
+
+	}
+
+	@Override
+	public List<BookTitle> findByBookId(String bookId) {
+		Query query = Query.query(Criteria.where("BookTitle.bookId").is(bookId));
+		return operations.find(query, BookTitle.class);
+
 	}
 
 }
