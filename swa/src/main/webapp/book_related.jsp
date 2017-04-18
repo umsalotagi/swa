@@ -367,6 +367,7 @@
 																
 																String search=request.getParameter("search");
 																String txt=request.getParameter("txt");
+																if(search!=null && txt!=null){
 														if("BookTitle".equals(search))
 														{
 															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.op);
@@ -395,7 +396,7 @@
 															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.op);
 															bookTitles=bktitlerepo.findByTag(txt);		
 														}
-																
+																}
 																%>
 																<% Iterator<BookTitle> i=bookTitles.iterator(); 
 																
