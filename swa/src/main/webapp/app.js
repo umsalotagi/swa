@@ -6,6 +6,7 @@ app.controller('myctrl', function($scope) {
     $scope.select=function(BookTitleId)
 	{
     	//$scope.b="Welcome to Angular";
+    	alert($scope.BookTitleId);
     	$http.get("select.jsp?BookTitleId="+$scope.BookTitleId).then(function(response)
 				{
 	//		var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');

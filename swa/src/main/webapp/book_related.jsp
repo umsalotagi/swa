@@ -2,7 +2,7 @@
 <%@page import="com.swapasya.model.DBConnect"%>
 <%@page import="com.swapasya.repo.BookTitleRepositoryMongoDB,java.util.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" errorPage="error.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html lang="en">
@@ -38,9 +38,10 @@
 
 <!-- Custom Theme Style -->
 <link href="./build/css/custom.min.css" rel="stylesheet">
+<script type="text/javascript" src="app.js"></script>
 </head>
 
-<body class="nav-md">
+<body class="nav-md" ng-app="myapp">
 	<div class="container body">
 		<div class="main_container">
 			<div class="col-md-3 left_col">
@@ -320,7 +321,7 @@
 												<div class="form-group">
 													<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 														<button class="btn btn-primary" type="button">Cancel</button>
-														<input type="submit" class="btn btn-success">Submit</button>
+														<input type="submit" class="btn btn-success" value="Search"/>
 													</div>
 												</div>
 
@@ -344,7 +345,7 @@
 												<!-- start accordion -->
 												<div class="accordion" id="accordion1" role="tablist"
 													aria-multiselectable="true">
-													<div class="panel">
+													<div class="panel" ng-controller="myctrl">
 
 
 														<table id="datatable"
@@ -362,55 +363,66 @@
 
 															<tbody>
 																
-																<%! List<BookTitle> bookTitles; %>
+																<%! List<BookTitle> bookTitles; 
+																//	List<Object> justForAuth;
+																
+																%>
 																<%
 																
 																String search=request.getParameter("search");
 																String txt=request.getParameter("txt");
+																
+																
 																if(search!=null && txt!=null){
 														if("BookTitle".equals(search))
 														{
-															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.op);
+															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.getConnection());
 															bookTitles=bktitlerepo.findByBookTitle(txt);			
 														}
 														if("BookID".equals(search))
 														{
-															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.op);
+															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.getConnection());
 															 bookTitles=bktitlerepo.findByBookId(txt);			
 														}
 																
 														if("Author".equals(search))
 														{
-															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.op);
+															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.getConnection());
 															bookTitles=bktitlerepo.findByAuthor(txt);			
 														}
 																
 														if("Publication".equals(search))
 														{
-															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.op);
+															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.getConnection());
 															 bookTitles=bktitlerepo.findByPublication(txt);			
 														}
 																
 														if("Tag".equals(search))
 														{
-															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.op);
+															BookTitleRepositoryMongoDB bktitlerepo=new BookTitleRepositoryMongoDB(DBConnect.getConnection());
 															bookTitles=bktitlerepo.findByTag(txt);		
 														}
-																}
+																
 																%>
+																
 																<% Iterator<BookTitle> i=bookTitles.iterator(); 
 																
 																while(i.hasNext()){
-																	BookTitle bookTitle=i.next();
+																	 BookTitle bookTitle=i.next();
 																%>
 																<tr>
-																	<td><a ng-href="#" ng-click="select(BookTitleId='<%=bookTitle.getBookTitleID()%>')"><%=bookTitle.getBookTitleID()%> </a></td>
-																	<td><img src="<%=bookTitle.getImgPath()%>"/></td>
+																	<%--<td><%=o %></td> --%>
+																	
+																	
+																	<td><a href="#" ng-click="select(BookTitleId='<%=bookTitle.getBookTitleID()%>')"><%=bookTitle.getBookTitleID()%> </a></td>
+																	<td><img src="<%=bookTitle.getImgPath()%>" width="50px" height="50px"/></td>
 																	<td><%=bookTitle.getBookName()%></td>
 																	<td><%=bookTitle.getAuthor() %></td>
-																	<td><%=bookTitle.getPublication()%></td>
-																</tr>
-																<%} %>
+																	<td><%=bookTitle.getPublication()%></td> 
+															</tr>
+																<%}%>
+																
+																<% }%>
 																<%--<tr>
 																	<td><a href="form_editbook.html" >Garrett Winters</a></td>
 																	<td><a href="form_editbook.html" >Accountant</a></td>

@@ -39,7 +39,9 @@ public class BookTitle {
 	List<Book> books;
 	List<WaitList> waitList;
 	List<AssignList> assignList;
-	
+	public BookTitle() {
+		// TODO Auto-generated constructor stub
+	}
 	/**
 	 * @param bookTitleID
 	 * @param isbnNumber
