@@ -1,11 +1,23 @@
 package com.swapasya.domains;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 
 public class AssignList {
 	
 	@Id
 	private String id;
+	
+	private Date timestamp;
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
 
 	public String getId() {
 		return id;

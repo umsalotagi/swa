@@ -297,6 +297,7 @@ try {
 		{
 			WaitList w=i1.next();
 			waitLs.put("id", w.getId());
+			waitLs.put("timestamp",w.getTimestamp());
 			bkTitle.put("waitList", waitLs);
 		}
 		
@@ -307,6 +308,7 @@ try {
 		{
 			AssignList a=i2.next();
 			assignLs.put("id", a.getId());
+			assignLs.put("timestamp",a.getTimestamp());
 			bkTitle.put("assignList", assignList);
 		}
 		 coll.insert(bkTitle);
