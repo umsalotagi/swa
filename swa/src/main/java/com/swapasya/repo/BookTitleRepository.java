@@ -18,6 +18,7 @@ public interface BookTitleRepository  extends CrudRepository<BookTitle, String>{
 	List<BookTitle> findByAuthor(String author);
 	List<BookTitle> findByPublication(String publication);
 	List<BookTitle> findByBookId(String bookId);
+	void insertOne(BookTitle bookTitle);
 	
 	
 }
