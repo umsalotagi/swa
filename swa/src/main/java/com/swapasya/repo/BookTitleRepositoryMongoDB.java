@@ -28,7 +28,10 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.swapasya.domains.AssignList;
+import com.swapasya.domains.Book;
 import com.swapasya.domains.BookTitle;
+import com.swapasya.domains.WaitList;
 
 public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
@@ -151,21 +154,19 @@ List<BookTitle> listOfbkTitles=new ArrayList<>();
 		BasicDBObject key = new BasicDBObject("bookTitleID", true);
 		key.append("imgPath", true);
 		key.append("bookName", true);
-		key.append("authour",true);
+		key.append("author",true);
 		key.append("publication",true);
 	    BasicDBObject initial = new BasicDBObject("","");
 try {
 
 
 	        BasicDBObject cond = new BasicDBObject();
-	        cond.put("authour", author);
+	        cond.put("author", author);
 
 	        String reduce = "function(doc,prev){ }";
 	        
 	        BasicDBList returnList = (BasicDBList) coll.group(key, cond, initial, reduce);
 	        
-	        Object multi[][]=new Object[1][5];
-	        int i=0;
 	            for (Object o : returnList) {
 	            	System.out.println(o);
 	            	
@@ -250,4 +251,108 @@ try {
 
 	}
 
-}
+	@Override
+	public void insertOne(BookTitle bookTitle) {
+
+	    DBCollection coll=  operations.getCollection("BookTitle");
+	    
+		BasicDBObject bkTitle=new BasicDBObject();
+		
+		bkTitle.put("bookTitleID", bookTitle.getBookTitleID());
+		bkTitle.put("isbnNumber", bookTitle.getIsbnNumber());
+		bkTitle.put("bookName", bookTitle.getBookName());
+		bkTitle.put("author", bookTitle.getAuthor());
+		bkTitle.put("publication", bookTitle.getPublication());
+		bkTitle.put("bindingType", bookTitle.getBindingType());
+		bkTitle.put("noOfPages", bookTitle.getNoOfPages());
+		bkTitle.put("language", bookTitle.getLanguage());
+		bkTitle.put("imgPath", bookTitle.getImgPath());
+		bkTitle.put("tags", bookTitle.getTags().toArray());
+		
+		
+		
+		List<Book> listOfBooks= bookTitle.getBooks();
+		BasicDBObject book[]=new BasicDBObject[listOfBooks.size()];
+		int j=0;
+		Iterator<Book> i= listOfBooks.iterator();
+		while(i.hasNext())
+		{
+			Book b=i.next();
+			
+			book[j]=new BasicDBObject();
+			
+			book[j].put("bookID", b.getBookID());
+			book[j].put("purchaseDate", b.getPurchaseDate());
+			book[j].put("price", b.getPrice());
+			book[j].put("borrowedBy", b.getBorrowedBy());
+			book[j].put("issuedType", b.getIssuedType());
+			book[j].put("categoryType", b.getCategoryType());
+			book[j].put("issueDate", b.getIssueDate());
+			book[j].put("expectedReturnDate", b.getExpectedReturnDate());
+			j++;
+			
+		}
+		bkTitle.put("books",book);
+		System.out.println("Till books done");
+		
+		BasicDBObject waitLs=new BasicDBObject();
+		List<WaitList> waitList= bookTitle.getWaitList();
+		Iterator<WaitList> i1= waitList.iterator();
+		while(i1.hasNext())
+		{
+			WaitList w=i1.next();
+			waitLs.put("id", w.getId());
+			waitLs.put("timestamp",w.getTimestamp());
+			bkTitle.put("waitList", waitLs);
+		}
+		
+		System.out.println("Till waitList");
+		
+		BasicDBObject assignLs=new BasicDBObject();
+		List<AssignList> assignList= bookTitle.getAssignList();
+		Iterator<AssignList> i2= assignList.iterator();
+		while(i2.hasNext())
+		{
+			AssignList a=i2.next();
+			assignLs.put("id", a.getId());
+			assignLs.put("timestamp",a.getTimestamp());
+			bkTitle.put("assignList", assignList);
+		}
+		System.out.println("Till assignList");
+		 coll.insert(bkTitle);
+		
+		}
+		
+		
+		
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

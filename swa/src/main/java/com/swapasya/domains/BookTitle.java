@@ -25,7 +25,7 @@ public class BookTitle {
 	@Indexed
 	private String bookName; // ***Mand
 	@Indexed
-	private String authour; // ***Mand
+	private String author; // ***Mand
 	@Indexed
 	private String publication;
 
@@ -59,7 +59,7 @@ public class BookTitle {
 		this.bookTitleID = bookTitleID;
 		this.isbnNumber = isbnNumber;
 		this.bookName = bookName;
-		this.authour = authour;
+		this.author = authour;
 		this.publication = publication;
 		this.bindingType = bindingType;
 		this.tags = tags;
@@ -80,15 +80,6 @@ public class BookTitle {
 	}
 	
 	
-
-	public String getAuthour() {
-		return authour;
-	}
-
-	public void setAuthour(String authour) {
-		this.authour = authour;
-	}
-
 	public List<WaitList> getWaitList() {
 		return waitList;
 	}
@@ -97,13 +88,13 @@ public class BookTitle {
 		this.waitList = waitList;
 	}
 	
-	public void addToWaitList(WaitList waitList) {
+	/*public void addToWaitList(WaitList waitList) {
 		this.waitList.add(waitList);
 	}
 	
 	public void removeFromWaitList (WaitList waitList) {
 		this.waitList.remove(waitList);
-	}
+	}*/
 
 	public List<AssignList> getAssignList() {
 		return assignList;
@@ -113,9 +104,9 @@ public class BookTitle {
 		this.assignList = assignList;
 	}
 	
-	public void addToAssignList(AssignList assignList) {
+/*	public void addToAssignList(AssignList assignList) {
 		this.assignList.add(assignList);
-	}
+	}*/
 
 	public String getBookTitleID() {
 		return bookTitleID;
@@ -142,11 +133,11 @@ public class BookTitle {
 	}
 
 	public String getAuthor() {
-		return authour;
+		return author;
 	}
 
 	public void setAuthor(String author) {
-		this.authour = author;
+		this.author = author;
 	}
 
 	public String getPublication() {
@@ -196,7 +187,4 @@ public class BookTitle {
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
 	}
-	
-	
-	
 }
