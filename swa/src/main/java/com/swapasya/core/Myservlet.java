@@ -6,28 +6,34 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.Category;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Link;
-import com.google.appengine.api.datastore.PhoneNumber;
-import com.google.appengine.api.datastore.PostalAddress;
-import com.google.appengine.api.datastore.Rating;
+import org.springframework.data.mongodb.core.MongoOperations;
 
+import com.swapasya.domains.AssignList;
+import com.swapasya.domains.Book;
+import com.swapasya.domains.BookTitle;
+import com.swapasya.domains.WaitList;
+import com.swapasya.model.DBConnect;
+import com.swapasya.repo.BookTitleRepositoryMongoDB;
+
+@WebServlet("/myservlet")
 public class Myservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public Myservlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		response.setContentType("text/plain");
+		response.getWriter().println("Hello, Welcome to Spring MongoDB !!! General");
+		
 		String btn=request.getParameter("sbtn");
+		
+		System.out.println(btn + " response");
+		
 		if("btn1".equals(btn))
 		{
 			callingBtn1(request, response);
@@ -74,121 +80,33 @@ public class Myservlet extends HttpServlet {
 	
 	
 	void callingBtn1(HttpServletRequest req, HttpServletResponse resp) throws IOException
-	{
-		DatastoreService sa = DatastoreServiceFactory.getDatastoreService();
+	{	
+		System.out.println("Pressed Button one ...");
+		MongoOperations op=DBConnect.getConnection();
+		BookTitleRepositoryMongoDB mdb=new BookTitleRepositoryMongoDB(op);
 		
-		resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, Welcome to GAE datasore !!! General");
+		ArrayList<String> tags=new ArrayList<>();
+		tags.add("Self Help");
+		tags.add("Mythology");
 		
-	//  
-		// waitlist , confirmed status for a request , renew are very co relevent
-
+		BookTitle bt = new BookTitle("BT01", "9380658745", "The Immortals of Meluha (Shiva Trilogy)"
+				, "Amish Tripathi", "Westland", "Paperback", tags, 415, "English" , "Book");
 		
-		GeneralFinal gen = new GeneralFinal ("MH001");
-		Date d = new Date ();
+		ArrayList<String> tags2=new ArrayList<>();
+		tags2.add(".net");
+		tags2.add("ASP");
 		
+		BookTitle bkTitle=new BookTitle(".Net", "1232u348", "Pro ASP.NET Core MVC", "Adam Freeman","XXX", "Folded",tags2 , 2000, "English" , "Book");
 		
+		mdb.insertOne(bkTitle);
+		mdb.insertOne(bt);
 		
-//		try {
-//			createBookFromCSV(gen);
-//			createperson();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		
-		Read r5 = new Read("MH001");
-		
-		r5.getAssignList("16119");
-
-
-		System.out.println("Exit");
-		System.exit(0);
-		
-		try {
-			gen.addMeToWaitORAssignList ( "161119" , "T_B02");
-			gen.addMeToWaitORAssignList ( "161119" , "T_B02");
-			gen.addMeToWaitORAssignList ( "161119" , "T_B02");
-			gen.addMeToWaitORAssignList ( "161120" , "T_B02");
-			gen.addMeToWaitORAssignList ( "161120" , "T_B02");
-			
-			
-		} catch (TransactionFailed e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		Iterable<BookTitle> it = mdb.findAll();
+		for (BookTitle bb : it) {
+			System.out.println(bb.getBookName() + " " + bb.getBookTitleID());
 		}
-		
-		
-		
-		gen.issueBookByCategory("161120", "B17", d);
-		gen.issueBookByCategory("161119", "B15", d);
-		gen.issueBookByCategory("161119", "B18", d);
-		
-		gen.allReturn(  "161120","B17", d);
-	//	gen.allReturnOne("B15", d);
-	//	gen.allReturnOne("B18", d);
-		
-		System.out.println("Exit");
-		System.exit(0);
-		
-//		
-		Read r3 = new Read("MH001");
-		try {
-			r3.getHistory("161119");
-			r3.getHistory("161117");
-			
-			r3.getHistoryForBook("B10");
-			r3.getHistoryForBook("B07");
-			r3.getHistoryForBook("B13");
-		} catch (TransactionFailed e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		List<String> tags = new ArrayList <String> ();
-		ArrayList <Category> ctags = new ArrayList <Category> ();
-		Rating r2 = new Rating(3);
-		Link l = new Link("path");
-		gen.addBook("B27", "354667", "One2", "Two", "Book", "My", 200, d, "OK", ctags, 222, "Marathi", 1, r2, l);
-		gen.addBook("B28", "354665", "One2", "Two", "Book", "My", 200, d, "OK", ctags, 222, "Marathi", 1, r2, l);
-		gen.addBook("B29", "354665", "One2", "Two", "Book", "My", 200, d, "OK", ctags, 222, "Marathi", 1, r2, l);
-		
-		
-		System.out.println("Exit");
-		System.exit(0);
-		
-	//	TestCase(gen , d);
-// 		gen.issueBookByCategory("161120", "B01", d);
-//		
-//		gen.issueBookByIssueType("161120", "B02", d, "BookBank");
-//		gen.issueBookByCategory("161120", "B03", d);
-//		gen.issueBookByCategory("161118", "B04", d);
-//		gen.issueBookByCategory("161118", "B05", d);
-//		
-//		System.out.println("book returningggggggg");
-//		
-//		gen.allreturn("161120", "B01", d);
-//		gen.allreturn("161120", "B02", d);
-//		gen.allreturn("161120", "B03", d);
-//		gen.allreturn("161118", "B04", d);
-//		gen.allreturn("161118", "B05", d);
-		
-		System.out.println("Get History ::::::::::::::::::::");
-		Read r = new Read("MH001");
-		try {
-			r.getHistory("161119");
-		} catch (TransactionFailed e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		System.out.println("\n\n\n\n Return");
-		
-	//	testCase( gen,  d , 30);
 	}
+	
 	void callingBtn2()
 	{
 		
@@ -223,7 +141,7 @@ public class Myservlet extends HttpServlet {
 	}
 	void callingBtn10()
 	{
-		
+		System.out.println("Button 10 called");
 	}
 	
 	
@@ -242,7 +160,54 @@ public class Myservlet extends HttpServlet {
 	
 	
 	
+public void old () {
+		
+		MongoOperations op=DBConnect.getConnection();
+		BookTitleRepositoryMongoDB mdb=new BookTitleRepositoryMongoDB(op);
+		
+		ArrayList<String> tags=new ArrayList<>();
+		tags.add(".net");
+		tags.add("ASP");
+		
+		
+		List<Book> books=new ArrayList<>();
+		Book book=new Book("b001",new Date(12, 10, 2016), 800, "xx");
+		Book book1=new Book("b002",new Date(11, 10, 2016), 800, "xx");
+		books.add(book);
+		books.add(book1);
+		
+		
+		List<WaitList> waitList=new ArrayList<>();
+		List<AssignList> assignList=new  ArrayList<>();
+		
+		
+		BookTitle bkTitle=new BookTitle(".Net", "1232u348", "Pro ASP.NET Core MVC", "Adam Freeman","XXX", "Folded",tags , 2000, "English" , "Book");
+		
+		bkTitle.setBooks(books);
+		bkTitle.setWaitList(waitList);
+		bkTitle.setAssignList(assignList);
+		
+		mdb.insertOne(bkTitle);
+		System.out.println("Inserted Successfully");
+	}
 	
+	public void add1 () throws ClassNotFoundException {
+		
+		ReadTxt r = new ReadTxt();
+		ArrayList<ArrayList<String>>  data = r.readT("data/catalogue.txt");
+		
+	}
+	
+	public void add2 () throws ClassNotFoundException {
+		
+		ReadTxt r = new ReadTxt();
+		ArrayList<ArrayList<String>>  data = r.readT("data/catalogue.txt");
+		
+	}
+	
+	public void addBook () {
+		
+	}
 	
 	
 	
@@ -318,31 +283,6 @@ public class Myservlet extends HttpServlet {
 	  }
 	
 	
-	public void createperson() {
-		
-		
-		createPerson("161117", "Sagar", "Gag", "Teacher", "Shivann col, nagar", "757575757");
-		createPerson("161118", "AMit", "Paul", "Teacher", "Jaature , solapur", "655555555");
-		createPerson("161119", "Rahul", "Kana", "Student", "bharat nagar, solapur", "77777777777");
-		createPerson("161120"	, "Ram", "Sur", "Student", " Ram Nagar , New Delhi", "9908997688");
-		createPerson("161121"	, "Shyam", "Pathak", "Student", " Vishal Nagar , New Delhi", "5555997688");
-		createPerson("161122"	, "Parshya", "DIsh", "Student", " Zinagt Nagar , solapur", "111111111");
-		createPerson("161123"	, "Swati", "Gajare", "Student", " Shivshahi Nagar , Solapur", "2222222222");
-		createPerson("161124"	, "Avanti", "Surwase", "Student", " Shivaji Nagar , Mumbai", "6666666666");
-	
-	}
-	
-	public void createPerson (String ID , String firstName ,  String lastName, String role ,String addd , String phh) {
-		
-		General gen = new General ("MH001");
-		PostalAddress add = new PostalAddress (addd);
-		PhoneNumber ph = new PhoneNumber (phh);
-		
-		gen.addPersonDetailsTemp(ID, "123", firstName, lastName, add, ph, role);
-		
-	//	gen.addPersonDetails(ID, password, firstName, lastName, gUser, address, emailId, mobileNo, contactNo, degree, branch, courseyear, division, rollNo, booksInPossesion, isBookBankEnabled, bookBankID, role, admissionDate);
-		
-	}
 	
 	ArrayList <ArrayList <String>> textDb;
 	
@@ -356,78 +296,13 @@ public class Myservlet extends HttpServlet {
 		textDb.get(0).get(0);
 		
 		StringBuffer s = new StringBuffer();
-		
-		for (ArrayList <String> row : textDb) {
 			
-			
-			String bookID = row.get(0);
-			if (bookID.equals("BookID")) {
-				continue;
-			}
-			s.append("\"" + bookID + "\", ");
-			
-			//System.out.println(row);
-			String clgName = row.get(1);
-			String isbn = row.get(2);
-			String bookName = row.get(3);
-			String authour = row.get(4);
-			String publication = row.get(5);
-			String price = row.get(6);
-			
-			String category = row.get(8);
-			String noOfPages = row.get(14);
-			String language = row.get(15);
-			
-//			String tag1 = row.get(17);
-//			String tag2 = row.get(18);
-//			String tag3 = row.get(19);
-//			String tag4 = row.get(20);
-			
-			// List<Entity> employees = Arrays.asList(employee1, employee2, employee3);
-			List<String> tags = new ArrayList <String> ();
-			ArrayList <Category> ctags = new ArrayList <Category> ();
-			for (int i=17 ; i>10; i++) {
-				try {
-					ctags.add(new Category(row.get(i)));
-				} catch (IndexOutOfBoundsException e) {
-					System.out.println("indexxx");
-					break;
-				}
 
-			}
-			
-			if (price.isEmpty() || price == "") {
-				price = "0";
-			}
-			
-			if (noOfPages.isEmpty() || noOfPages.equals("")) {
-				noOfPages = "0";
-			}
-			
-			System.out.println(bookID +" " + category + " " + noOfPages + " " + language );
-			
-			gen.addBook(bookID, isbn, bookName, authour, category, publication,  Integer.parseInt(price) , null, null, ctags, Integer.parseInt(noOfPages), language, 0, null, null);
-			//gen.addBookTemp(bookID, bookName, authour, tags, categoryType);
-		}
-		
-	//	System.out.println(s.toString());
 		
 	}
 	
 	public void setRules (GeneralFinal gen) {
-		gen.roleDefine("Student", "Study");
-		gen.roleDefine("Teacher", "Teach");
-		
-		gen.categoryWiseRules("Study", "Book",  2, 7, 4, 5);
-		gen.categoryWiseRules("Study", "Magazine",  1, 4, 4, 2);
-		gen.categoryWiseRules("Study", "CD",  1, 4, 4, 2);
-		
-		gen.categoryWiseRules("Teach", "Book",  4, 7, 6, 0);
-		gen.categoryWiseRules("Teach", "Magazine",  2, 7, 6, 0);
-		gen.categoryWiseRules("Teach", "CD",  2, 7, 6, 0);
-		
-		gen.issueWiseRules("Study", "BookBank",  2, 7, (float) 1.0);
-		gen.issueWiseRules("Study", "GATE",  2, 7, (float) 1.0);
+
 	}
 		
 
