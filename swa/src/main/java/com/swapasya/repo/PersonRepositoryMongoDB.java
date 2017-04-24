@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.Assert;
 
+import com.swapasya.domains.BookTitle;
 import com.swapasya.domains.Person;
 
 public class PersonRepositoryMongoDB implements PersonRepository 
@@ -53,9 +54,11 @@ public class PersonRepositoryMongoDB implements PersonRepository
 	}
 
 	@Override
-	public boolean exists(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean exists(String id) {
+		if (findOne(id)!=null)
+			return true;
+		else
+			return false;
 	}
 
 	@Override
@@ -99,5 +102,24 @@ public class PersonRepositoryMongoDB implements PersonRepository
 		}
 		return list;
 	}
+
+	@Override
+	public List<Person> findByName(String personName) {
+		Query query = Query.query(Criteria.where("personName").is(personName));
+		return operations.find(query, Person.class);
+	}
+
+	@Override
+	public List<Person> findByDegree(String degree) {
+		Query query = Query.query(Criteria.where("degree").is(degree));
+		return operations.find(query, Person.class);
+	}
+
+	@Override
+	public List<Person> findByBranch(String branch) {
+		Query query = Query.query(Criteria.where("branch").is(branch));
+		return operations.find(query, Person.class);
+	}
+	
 
 }

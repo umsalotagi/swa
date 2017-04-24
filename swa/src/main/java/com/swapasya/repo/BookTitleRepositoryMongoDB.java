@@ -82,8 +82,10 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
 	@Override
 	public boolean exists(String id) {
-		// TODO Auto-generated method stub
-		return false;
+		if (findOne(id)!=null)
+			return true;
+		else
+			return false;
 	}
 
 	@Override
