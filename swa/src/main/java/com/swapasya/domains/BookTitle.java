@@ -21,6 +21,7 @@ public class BookTitle {
 	 */
 	@Id
 	private String bookTitleID; // ***Mand
+	
 	private String isbnNumber;
 	@Indexed
 	private String bookName; // ***Mand
@@ -36,12 +37,18 @@ public class BookTitle {
 	private String language;
 	private String imgPath;
 	
+	//private String category; need to think ... category is already defined in book
+	
+	// think on edition
+	
 	List<Book> books;
 	List<WaitList> waitList;
 	List<AssignList> assignList;
+	
 	public BookTitle() {
-		// TODO Auto-generated constructor stub
+		
 	}
+	
 	/**
 	 * @param bookTitleID
 	 * @param isbnNumber
@@ -55,7 +62,6 @@ public class BookTitle {
 	 */
 	public BookTitle(String bookTitleID, String isbnNumber, String bookName, String authour, String publication,
 			String bindingType, ArrayList<String> tags, int noOfPages, String language) {
-		super();
 		this.bookTitleID = bookTitleID;
 		this.isbnNumber = isbnNumber;
 		this.bookName = bookName;
@@ -65,6 +71,7 @@ public class BookTitle {
 		this.tags = tags;
 		this.noOfPages = noOfPages;
 		this.language = language;
+//		this.category = category;
 	}
 
 	public List<Book> getBooks() {
@@ -76,6 +83,9 @@ public class BookTitle {
 	}
 	
 	public void addBook (Book book) {
+		if (this.books==null) {
+			this.books = new ArrayList <Book>();
+		}
 		this.books.add(book);
 	}
 	

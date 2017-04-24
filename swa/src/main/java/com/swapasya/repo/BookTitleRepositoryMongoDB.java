@@ -144,9 +144,16 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 		return operations.find(query, BookTitle.class);
 
 	}
-
+	
+	
 	@Override
 	public List<BookTitle> findByAuthor(String author) {
+		Query query = Query.query(Criteria.where("author").is(author)); // author ahe he authour lihili tu
+		return operations.find(query, BookTitle.class);
+	}
+
+	@Deprecated
+	public List<BookTitle> findByAuthor2(String author) {
 //		Query query = Query.query(Criteria.where("authour").is(author));
 		DBCollection coll = operations.getCollection("BookTitle");
 List<Object> listOfObjects=new ArrayList<>();
@@ -250,10 +257,17 @@ try {
 		return operations.find(query, BookTitle.class);
 
 	}
-
+	
 	@Override
 	public void insertOne(BookTitle bookTitle) {
+		operations.insert(bookTitle);
+	}
 
+	@Deprecated
+	public void insertOne2(BookTitle bookTitle) {
+		
+	//	operations.in
+		
 	    DBCollection coll=  operations.getCollection("BookTitle");
 	    
 		BasicDBObject bkTitle=new BasicDBObject();

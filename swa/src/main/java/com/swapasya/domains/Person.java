@@ -37,6 +37,7 @@ public class Person {
 	private Address currentAddress; /////
 	// private String inPossession; // depricated
 	// private String totalCategoryBksInPossesion;
+	// Gender
 
 	/**
 	 * Full constructor

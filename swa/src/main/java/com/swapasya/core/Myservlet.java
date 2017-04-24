@@ -89,17 +89,18 @@ public class Myservlet extends HttpServlet {
 		tags.add("Self Help");
 		tags.add("Mythology");
 		
-		BookTitle bt = new BookTitle("BT01", "9380658745", "The Immortals of Meluha (Shiva Trilogy)"
-				, "Amish Tripathi", "Westland", "Paperback", tags, 415, "English" , "Book");
+		BookTitle bt = new BookTitle("BT012", "9380658745", "The Immortals of Meluha (Shiva Trilogy) 2"
+				, "Amish Tripathi", "Westland", "Paperback", tags, 415, "English" );
 		
 		ArrayList<String> tags2=new ArrayList<>();
 		tags2.add(".net");
 		tags2.add("ASP");
+		mdb.insertOne(bt);
 		
-		BookTitle bkTitle=new BookTitle(".Net", "1232u348", "Pro ASP.NET Core MVC", "Adam Freeman","XXX", "Folded",tags2 , 2000, "English" , "Book");
+		BookTitle bkTitle=new BookTitle(".Net2", "1232u348", "Pro ASP.NET Core MVC 2", "Adam Freeman","XXX", "Folded",tags2 , 2000, "English" );
 		
 		mdb.insertOne(bkTitle);
-		mdb.insertOne(bt);
+		
 		
 		Iterable<BookTitle> it = mdb.findAll();
 		for (BookTitle bb : it) {
@@ -109,11 +110,44 @@ public class Myservlet extends HttpServlet {
 	
 	void callingBtn2()
 	{
+		System.out.println("Pressed Button two ...");
+		MongoOperations op=DBConnect.getConnection();
+		BookTitleRepositoryMongoDB mdb=new BookTitleRepositoryMongoDB(op);
+
+		List <BookTitle> btL =  mdb.findByAuthor("Amish Tripathi");
+		
+		Date pd = new Date();
+		
+		Book b = new Book("BT01.1", pd, 300, "Book");
+		Book b1 = new Book("BT01.2", pd, 400, "Book");
+		Book b2 = new Book("BT01.3", pd, 500, "Book");
+		
+		btL.get(1).addBook(b);
+		btL.get(1).addBook(b1);
+		btL.get(1).addBook(b2);
+		
+		List <Book> bs = btL.get(1).getBooks();
+		for (Book bb : bs) {
+			System.out.println(bb.getBookID());
+			System.out.println(bb.getPrice());
+		}
+		
+		System.out.println(btL.get(0).getIsbnNumber());
+		
+
+		mdb.save(btL.get(0));
 		
 	}
 	void callingBtn3()
 	{
+		System.out.println("Pressed Button three ...");
+		MongoOperations op=DBConnect.getConnection();
+		BookTitleRepositoryMongoDB mdb=new BookTitleRepositoryMongoDB(op);
 		
+		List<BookTitle> bt = mdb.findByAuthor("Amish Tripathi");
+		for (BookTitle bb : bt) {
+			System.out.println(bb.getBookTitleID());
+		}
 	}
 	void callingBtn4()
 	{
@@ -181,7 +215,7 @@ public void old () {
 		List<AssignList> assignList=new  ArrayList<>();
 		
 		
-		BookTitle bkTitle=new BookTitle(".Net", "1232u348", "Pro ASP.NET Core MVC", "Adam Freeman","XXX", "Folded",tags , 2000, "English" , "Book");
+		BookTitle bkTitle=new BookTitle(".Net", "1232u348", "Pro ASP.NET Core MVC", "Adam Freeman","XXX", "Folded",tags , 2000, "English" );
 		
 		bkTitle.setBooks(books);
 		bkTitle.setWaitList(waitList);

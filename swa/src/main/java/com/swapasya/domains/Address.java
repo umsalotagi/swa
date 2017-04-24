@@ -62,7 +62,6 @@ public class Address {
 		this.addressLine1 = addressLine1;
 	}
 
-
 	/**
 	 * @return the addressLine2
 	 */
