@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -11,7 +12,11 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  * @author Umesh
  *
  */
-
+/*
+ * this @Document is very important otherwise it will be just object not embeddd document
+ * and more @Document due to this id will be unique across row
+ */
+@Document
 public class Book {
 	
 	// NOTES
