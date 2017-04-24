@@ -414,7 +414,7 @@
 																	<%--<td><%=o %></td> --%>
 																	
 																	
-																	<td><a href="#" ng-click="select(BookTitleId='<%=bookTitle.getBookTitleID()%>')"><%=bookTitle.getBookTitleID()%> </a></td>
+																	<td><a ng-href="#" ng-click="select(BookTitleId='<%=bookTitle.getBookTitleID()%>')"><%=bookTitle.getBookTitleID()%> </a></td>
 																	<td><img src="<%=bookTitle.getImgPath()%>" width="50px" height="50px"/></td>
 																	<td><%=bookTitle.getBookName()%></td>
 																	<td><%=bookTitle.getAuthor() %></td>
