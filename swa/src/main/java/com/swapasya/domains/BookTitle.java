@@ -87,7 +87,28 @@ public class BookTitle {
 		if (this.books==null) {
 			this.books = new ArrayList <Book>();
 		}
+		for (Book b : books) {
+			if (b.getBookID().equals(book.getBookID())) {
+				System.out.println("Duplicate book found " + book.getBookID());
+				return;
+			}
+		}
 		this.books.add(book);
+	}
+	
+	@SuppressWarnings("unused")
+	public void removeBook (String bookID) {
+		Book bkToRem = null;
+		for (Book b : books) {
+			if (b.getBookID().equals(bookID)) {
+				bkToRem = b;
+				return;
+			}
+		}
+		
+		if (bkToRem!=null) {
+			books.remove(bkToRem);
+		}	
 	}
 	
 	
@@ -117,7 +138,12 @@ public class BookTitle {
 	
 /*	public void addToAssignList(AssignList assignList) {
 		this.assignList.add(assignList);
+	}
+	
+	public void removeFromAssignList(AssignList assignList) {
+		this.assignList.add(assignList);
 	}*/
+	
 
 	public String getBookTitleID() {
 		return bookTitleID;

@@ -2,6 +2,7 @@ package com.swapasya.domains;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,13 +17,19 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  * this @Document is very important otherwise it will be just object not embeddd document
  * and more @Document due to this id will be unique across row
  */
-@Document
+//@Document
 public class Book {
 	
 	// NOTES
 		//  waitlist, no. of books of same title.logic is yet to be decided
 		//  same book is not allowed to return and again take away in same day by same person.
-		@Id
+//		@Id
+//		private String bookID; 
+	
+//		@Id
+//		private ObjectId id = new ObjectId();
+	
+		@Indexed(unique=true,sparse=true)
 		private String bookID;   //  ***Mand
 		
 		private Date purchaseDate;

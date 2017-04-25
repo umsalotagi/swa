@@ -318,5 +318,32 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 		coll.insert(bkTitle);
 
 	}
+	
+	
+	
+	
+	// Need to decide best position of these function
+	// whether in book class or in this class.
+	
+	
+	public void addBook (String bookTitleID , Book b) {
+		
+	}
+	
+	public void removeBook (String bookTitleID , Book b) {
+			
+	}
+	
+	public void addToWaitList (String bookTitleID , String personID) {
+		
+	}
+	
+	public void removeFromWaitList (String bookTitleID , String personID) {
+		
+	}
+	
+	
+	
+	
 
 }
