@@ -33,6 +33,9 @@ import com.swapasya.domains.Book;
 import com.swapasya.domains.BookTitle;
 import com.swapasya.domains.WaitList;
 
+
+//   http://joegornick.com/2012/10/25/mongodb-unique-indexes-on-single-embedded-documents/
+	
 public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
 	private final MongoOperations operations;
@@ -132,6 +135,7 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 		}
 		return list;
 	}
+	
 
 	@Override
 	public List<BookTitle> findByBookTitle(String bookTitle) {

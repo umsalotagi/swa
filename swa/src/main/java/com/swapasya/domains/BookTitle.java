@@ -40,8 +40,9 @@ public class BookTitle {
 	//private String category; need to think ... category is already defined in book
 	
 	// think on edition
-	
+	//@Indexed(unique=true) // commented is good
 	List<Book> books;
+	
 	List<WaitList> waitList;
 	List<AssignList> assignList;
 	
