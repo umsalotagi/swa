@@ -38,6 +38,7 @@
 
 <!-- Custom Theme Style -->
 <link href="./build/css/custom.min.css" rel="stylesheet">
+<script type="text/javascript" src="angular.min.js"></script>
 <script type="text/javascript" src="app.js"></script>
 </head>
 
