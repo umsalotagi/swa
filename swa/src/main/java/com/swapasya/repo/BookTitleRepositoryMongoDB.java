@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -144,6 +145,12 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 		return operations.find(query, BookTitle.class);
 
 	}
+	
+	public List<BookTitle> findByBookTitleRegex(String bookTitle) {
+		Query query = Query.query(Criteria.where("bookName").regex(Pattern.compile(bookTitle, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE)));
+		return operations.find(query, BookTitle.class);
+
+	}
 
 	@Override
 	public List<BookTitle> findByTag(String tag) {
@@ -157,6 +164,11 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 	@Override
 	public List<BookTitle> findByAuthor(String author) {
 		Query query = Query.query(Criteria.where("author").is(author)); 
+		return operations.find(query, BookTitle.class);
+	}
+	
+	public List<BookTitle> findByAuthorRegex (String author) {
+		Query query = Query.query(Criteria.where("author").regex(Pattern.compile(author, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE))); 
 		return operations.find(query, BookTitle.class);
 	}
 
@@ -237,6 +249,13 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 	@Override
 	public List<BookTitle> findByPublication(String publication) {
 		Query query = Query.query(Criteria.where("publication").is(publication));
+		return operations.find(query, BookTitle.class);
+
+	}
+	
+	// Pattern.compile(input_location, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE)
+	public List<BookTitle> findByPublicationRegex (String publication) {
+		Query query = Query.query(Criteria.where("publication").regex( Pattern.compile(publication, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE)));
 		return operations.find(query, BookTitle.class);
 
 	}
