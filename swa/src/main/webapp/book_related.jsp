@@ -847,11 +847,11 @@
 		src="./vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
 	<!-- iCheck -->
 	<script src="./vendors/iCheck/icheck.min.js"></script>
-	<!-- PNotify -->
+	<!-- PNotify 
 	<script src="./vendors/pnotify/dist/pnotify.js"></script>
 	<script src="./vendors/pnotify/dist/pnotify.buttons.js"></script>
 	<script src="./vendors/pnotify/dist/pnotify.nonblock.js"></script>
-	
+	-->
 	<!-- jQuery Tags Input -->
     <script src="./vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
 

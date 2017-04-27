@@ -5,7 +5,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import com.swapsya.config.SpringMongoConfig;
+import com.swapasya.config.SpringMongoConfig;
 
 public class DBConnect {
 	public static MongoOperations op;

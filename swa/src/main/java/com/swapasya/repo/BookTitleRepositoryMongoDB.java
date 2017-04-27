@@ -114,6 +114,7 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
 	@Override
 	public BookTitle findOne(String bookTitleID) {
+		System.out.println(bookTitleID);
 		Query query = Query.query(Criteria.where("bookTitleID").is(bookTitleID));
 		return operations.findOne(query, BookTitle.class);
 
@@ -146,8 +147,10 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
 	@Override
 	public List<BookTitle> findByTag(String tag) {
-		Query query = Query.query(Criteria.where("tag").is(tag));
-		return operations.find(query, BookTitle.class);
+		Query query = Query.query(Criteria.where("tags").is(tag));
+		List<BookTitle> listOfBkTitles=operations.find(query, BookTitle.class);
+		System.out.println("returning by tags");
+		return listOfBkTitles;
 
 	}
 
@@ -240,7 +243,7 @@ public class BookTitleRepositoryMongoDB implements BookTitleRepository {
 
 	@Override
 	public List<BookTitle> findByBookId(String bookId) {
-		Query query = Query.query(Criteria.where("BookTitle.bookId").is(bookId));
+		Query query = Query.query(Criteria.where("books.bookID").is(bookId));
 		return operations.find(query, BookTitle.class);
 
 	}
