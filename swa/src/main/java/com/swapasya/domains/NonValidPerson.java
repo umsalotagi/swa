@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "NonValidPerson")
 public class NonValidPerson {
 	@Id
-	private String personID;
+	private String nonValidPersonID;
 	private String password;
 	@Indexed
 	private String personName;
@@ -62,7 +62,7 @@ public class NonValidPerson {
 			String branch, int courseyear, String division, String rollNo, String role, Date admissionDate,
 			String parentName, long parentContactNo, Address permanentAddress, Address currentAddress) {
 		super();
-		this.personID = personID;
+		this.nonValidPersonID = personID;
 		this.password = password;
 		this.personName = personName;
 		this.emailId = emailId;
@@ -113,16 +113,16 @@ public class NonValidPerson {
 	/**
 	 * @return the personID
 	 */
-	public String getPersonID() {
-		return personID;
+	public String getnonValidPersonID() {
+		return nonValidPersonID;
 	}
 
 	/**
 	 * @param personID
 	 *            the personID to set
 	 */
-	public void setPersonID(String personID) {
-		this.personID = personID;
+	public void setnonValidPersonID(String personID) {
+		this.nonValidPersonID = personID;
 	}
 
 	/**
@@ -307,7 +307,7 @@ public class NonValidPerson {
 
 	@Override
 	public String toString() {
-		return "Person [personID=" + personID + ", personName=" + personName + ", rollNo=" + rollNo + ", branch="
+		return "Person [personID=" + nonValidPersonID + ", personName=" + personName + ", rollNo=" + rollNo + ", branch="
 				+ branch + "]";
 	}
 
